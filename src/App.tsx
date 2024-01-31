@@ -59,7 +59,9 @@ export default function App() {
       {gamepadIndex !== undefined ? (
         <ControllerDisplay gamepadIndex={gamepadIndex} />
       ) : (
-        'No controller detected'
+        <div className='no-controller'>
+          <span>No controller detected</span>
+        </div>
       )}
     </>
   )
