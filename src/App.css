@@ -1,24 +1,35 @@
 .no-controller {
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   font-size: 6rem;
   text-align: center;
   text-shadow: 0 0 2px black;
 }
 
 .controller-base {
-  fill: rgba(0, 0, 0, 0.5);
+  fill: var(--controller-base-color);
 }
 
 .controller-button {
-  stroke: #fff;
-  stroke-width: 4px;
+  fill: var(--controller-button-color);
 }
 
-.controller-button.pressed {
-  fill: #fff;
+.controller-button.directional {
+  fill: var(--controller-button-directional-color, --controller-button-color);
+}
+
+.controller-button.special {
+  fill: var(--controller-button-special-color, --controller-button-color);
+}
+
+.controller-button.menu {
+  fill: var(--controller-button-menu-color, --controller-button-color);
+}
+
+.controller-button-stroke {
+  fill: none;
+  stroke: var(--controller-button-stroke-color);
+  stroke-width: var(--controller-button-stroke-width);
+}
+
+.pressed-overlay {
+  fill: var(--controller-pressed-overlay-color);
 }

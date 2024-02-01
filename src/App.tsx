@@ -1,7 +1,7 @@
+import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { HAUTE_T16 } from './templates/haute-t16'
-import { TemplateButton } from './templates/template'
+import { ButtonType, HAUTE_T16, SingleTemplateButton, TemplateButton } from './template'
 
 export default function App() {
   const [gamepadIndex, setGamepadIndex] = useState<number>()
@@ -33,35 +33,12 @@ export default function App() {
     }
   }, [])
 
-  // a
-  // b
-  // x
-  // y
-  // lb
-  // rb
-  // lt
-  // rt
-  // back
-  // start
-  // ls
-  // rs
-  // up
-  // down
-  // left
-  // right
-  // home
-
   return (
     <>
-      <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
-        {/* <img src='t16.png' style={{ position: 'absolute', left: 0, top: 0 }} /> */}
-      </div>
       {gamepadIndex !== undefined ? (
         <ControllerDisplay gamepadIndex={gamepadIndex} />
       ) : (
-        <div className='no-controller'>
-          <span>No controller detected</span>
-        </div>
+        <div className='no-controller'>No controller detected</div>
       )}
     </>
   )
@@ -104,7 +81,7 @@ function ControllerDisplay({ gamepadIndex }: { gamepadIndex: number }) {
       viewBox='0 0 640 360'>
       <ControllerBase width={640} height={360} r={24} />
       {HAUTE_T16.map((b, i) => (
-        <Button button={b} pressed={buttonState[i]} />
+        <Button button={b} pressed={buttonState[i]} key={i} />
       ))}
     </svg>
   )
@@ -115,10 +92,26 @@ function ControllerBase({ width, height, r }: { width: number; height: number; r
 }
 
 function Button({ button, pressed }: { button: TemplateButton; pressed: boolean }) {
-  const className = pressed ? 'controller-button pressed' : 'controller-button'
   return Array.isArray(button) ? (
-    button.map(b => <circle className={className} cx={b.x} cy={b.y} r={b.r} />)
+    button.map((b, i) => <ButtonContents button={b} pressed={pressed} key={i} />)
   ) : (
-    <circle className={className} cx={button.x} cy={button.y} r={button.r} />
+    <ButtonContents button={button} pressed={pressed} />
+  )
+}
+
+function ButtonContents({ button, pressed }: { button: SingleTemplateButton; pressed: boolean }) {
+  const buttonClass = clsx('controller-button', {
+    directional: button.type === ButtonType.Directional,
+    special: button.type === ButtonType.Special,
+    menu: button.type === ButtonType.Menu,
+  })
+  return (
+    <>
+      <circle className={buttonClass} cx={button.x} cy={button.y} r={button.r} />
+      {pressed ? (
+        <circle className={'pressed-overlay'} cx={button.x} cy={button.y} r={button.r} />
+      ) : undefined}
+      <circle className={'controller-button-stroke'} cx={button.x} cy={button.y} r={button.r} />
+    </>
   )
 }
